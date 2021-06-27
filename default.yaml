@@ -109,3 +109,7 @@ lnds:
 onchainDustAmount: 5000
 # TODO
 # carrierRegexFilter: ""
+
+twoFactor:
+  enabled: true
+  threshold: 300000 # sats

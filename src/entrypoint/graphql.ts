@@ -74,7 +74,7 @@ const resolvers = {
   Query: {
     me: async (_, __, { uid, user }) => {
       const { phone, username, contacts, language, level } = user
-
+      const twoFactorEnabled = user.twoFactorSecret ? true : false
       return {
         id: uid,
         level,
@@ -82,6 +82,7 @@ const resolvers = {
         username,
         contacts,
         language,
+        twoFactorEnabled,
       }
     },
 
@@ -194,6 +195,7 @@ const resolvers = {
     getWalletFees: () => ({
       deposit: yamlConfig.fees.deposit,
     }),
+    generate2fa: async (_, __, { wallet }) => wallet.generate2fa(),
   },
   Mutation: {
     requestPhoneCode: async (_, { phone }, { logger, ip }) => ({
@@ -202,6 +204,10 @@ const resolvers = {
     login: async (_, { phone, code }, { logger, ip }) => ({
       token: login({ phone, code, logger, ip }),
     }),
+    save2fa: async (_, { secret, token }, { wallet }) =>
+      wallet.save2fa({ secret, token }),
+    delete2fa: async (_, { token }, { wallet }) => wallet.delete2fa({ token }),
+    validate2fa: async (_, { token }, { wallet }) => wallet.validate2fa({ token }),
     updateUser: async (_, __, { wallet }) => ({
       setUsername: async ({ username }) => await wallet.setUsername({ username }),
       setLanguage: async ({ language }) => await wallet.setLanguage({ language }),
@@ -290,6 +296,7 @@ const permissions = shield(
       me: isAuthenticated,
       wallet: isAuthenticated,
       wallet2: isAuthenticated,
+      generate2fa: isAuthenticated,
       getLastOnChainAddress: isAuthenticated,
       getUserDetails: and(isAuthenticated, isEditor),
       getUid: and(isAuthenticated, isEditor),
@@ -298,7 +305,9 @@ const permissions = shield(
     Mutation: {
       // requestPhoneCode: not(isAuthenticated),
       // login: not(isAuthenticated),
-
+      delete2fa: isAuthenticated,
+      save2fa: isAuthenticated,
+      validate2fa: isAuthenticated,
       onchain: isAuthenticated,
       invoice: isAuthenticated,
       earnCompleted: isAuthenticated,
