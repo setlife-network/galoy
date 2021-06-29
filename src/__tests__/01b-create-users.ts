@@ -38,6 +38,16 @@ it("add user0/funder/Dealer", async () => {
 
 const username = "user0"
 
+const generateTokenHelper = ({ secret }) => {
+  const generateTokenResult = generateToken(secret)
+  expect(generateTokenResult).toBeTruthy()
+  if (generateTokenResult) {
+    return generateTokenResult.token
+  } else {
+    fail("generateToken returned null")
+  }
+}
+
 describe("username tests", () => {
   beforeAll(async () => {
     userWallet0 = await getUserWallet(0)
@@ -145,21 +155,20 @@ describe("username tests", () => {
 
   it("save 2fa for user0", async () => {
     const { secret } = userWallet0.generate2fa()
-    const token = generateToken(secret)!.token
+    const token = await generateTokenHelper({ secret })
     await userWallet0.save2fa({ secret, token })
-
     userWallet0 = await getUserWallet(0)
     expect(userWallet0.user.twoFactor.secret).toBe(secret)
   })
 
   it("validate 2fa for user0", async () => {
     const secret = userWallet0.user.twoFactor.secret
-    const token = generateToken(secret)?.token
+    const token = await generateTokenHelper({ secret })
     expect(UserWallet.validate2fa({ token, logger: baseLogger, secret })).toBeTruthy()
   })
 
   it("delete 2fa for user0", async () => {
-    const token = generateToken(userWallet0.user.twoFactor.secret)?.token
+    const token = await generateTokenHelper({ secret: userWallet0.user.twoFactor.secret })
     const result = await userWallet0.delete2fa({ token })
     expect(result).toBeTruthy()
     userWallet0 = await getUserWallet(0)
