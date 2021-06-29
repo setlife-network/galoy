@@ -34,7 +34,7 @@ let initBalance0, initBalance1
 const amountInvoice = 1000
 
 jest.mock("../notifications/notification")
-import { yamlConfig } from "../config"
+
 import { generateToken } from "node-2fa"
 jest.mock("../realtimePrice")
 

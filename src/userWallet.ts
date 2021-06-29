@@ -241,7 +241,7 @@ export abstract class UserWallet {
   }
 
   generate2fa = () => {
-    const { secret, uri, qr } = generateSecret({
+    const { secret, uri } = generateSecret({
       name: yamlConfig.name,
       account: this.user.phone,
     })

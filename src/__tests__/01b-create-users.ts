@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 import mongoose from "mongoose"
+import { usernameExists, setAccountStatus } from "../AdminOps"
 import { generateToken } from "node-2fa"
 import { AdminOps } from "../AdminOps"
 import { usernameExists } from "../AdminOps"
@@ -137,12 +138,12 @@ describe("username tests", () => {
   })
 
   it("sets account status correctly", async () => {
-    await AdminOps.setAccountStatus({ uid: userWallet2.user._id, status: "locked" })
+    await setAccountStatus({ uid: userWallet2.user._id, status: "locked" })
     userWallet2 = await getUserWallet(2)
     await expect(userWallet2.user.status).toBe("locked")
   })
 
-  it("set 2fa for user0", async () => {
+  it("save 2fa for user0", async () => {
     const { secret } = userWallet0.generate2fa()
     const token = generateToken(secret)!.token
     await userWallet0.save2fa({ secret, token })
