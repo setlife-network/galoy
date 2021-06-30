@@ -128,3 +128,18 @@ export class AuthorizationError extends CustomError {
     super(message, "NOT_AUTHORIZED", { forwardToClient, logger, level, metadata })
   }
 }
+
+export class OnChainFeeEstimationError extends CustomError {
+  constructor(
+    message = "Unable to estimate onchain fee",
+    // FIXME: Do we want this to be a warning or an error?
+    { forwardToClient = true, logger, level = "warn", ...metadata },
+  ) {
+    super(message, "ONCHAIN_FEE_ESTIMATION_ERROR", {
+      forwardToClient,
+      logger,
+      level,
+      metadata,
+    })
+  }
+}
