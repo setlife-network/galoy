@@ -120,10 +120,6 @@ export const OnChainMixin = (superclass) =>
         throw new ValidationError(error, { logger: onchainLogger })
       }
 
-      if (amount < yamlConfig.onchainDustAmount) {
-        throw new DustAmountError(undefined, { logger: onchainLogger })
-      }
-
       return await redlock(
         { path: this.user._id, logger: onchainLogger },
         async (lock) => {
@@ -177,6 +173,10 @@ export const OnChainMixin = (superclass) =>
           }
 
           // normal onchain payment path
+
+          if (amount < yamlConfig.onchainDustAmount) {
+            throw new DustAmountError(undefined, { logger: onchainLogger })
+          }
 
           onchainLogger = onchainLogger.child({ onUs: false })
 
