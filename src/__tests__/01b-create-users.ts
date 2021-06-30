@@ -164,7 +164,9 @@ describe("username tests", () => {
   it("validate 2fa for user0", async () => {
     const secret = userWallet0.user.twoFactor.secret
     const token = await generateTokenHelper({ secret })
-    expect(UserWallet.validate2fa({ token, logger: baseLogger, secret })).toBeTruthy()
+    expect(
+      UserWallet.throwIf2faNotValid({ token, logger: baseLogger, secret }),
+    ).toBeTruthy()
   })
 
   it("delete 2fa for user0", async () => {

@@ -302,7 +302,7 @@ export const LightningMixin = (superclass) =>
           })
         }
 
-        UserWallet.validate2fa({
+        UserWallet.throwIf2faNotValid({
           token,
           logger: lightningLogger,
           secret: this.user.twoFactor.secret,
