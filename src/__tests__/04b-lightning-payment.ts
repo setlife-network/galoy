@@ -314,9 +314,11 @@ functionToTests.forEach(({ fn, name, initialFee }) => {
       await userWallet0.save2fa({ secret, token })
     }
 
+    const remainingThreshold = await userWallet0.user.remainingTwoFactorThreshold()
+
     const { request } = await createInvoice({
       lnd: lndOutside1,
-      tokens: userWallet0.user.twoFactor.threshold + 1,
+      tokens: remainingThreshold + 1,
     })
     await expect(fn(userWallet0)({ invoice: request })).rejects.toThrow()
 

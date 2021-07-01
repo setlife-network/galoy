@@ -4,8 +4,6 @@
 import mongoose from "mongoose"
 import { usernameExists, setAccountStatus } from "../AdminOps"
 import { generateToken } from "node-2fa"
-import { AdminOps } from "../AdminOps"
-import { usernameExists } from "../AdminOps"
 import { yamlConfig } from "../config"
 import { baseLogger } from "../logger"
 import { setupMongoConnection } from "../mongodb"

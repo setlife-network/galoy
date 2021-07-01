@@ -272,6 +272,31 @@ UserSchema.virtual("oldEnoughForWithdrawal").get(function (this: typeof UserSche
   return d - this.created_at.getTime() > yamlConfig.limits.oldEnoughForWithdrawal
 })
 
+const getTimestampYesterday = () => Date.now() - MS_PER_DAY
+
+// FIXME: Improve function name
+UserSchema.methods.remainingTwoFactorThreshold = async function () {
+  const threshold = this.twoFactor.threshold
+
+  const txnType = [
+    { type: "on_us" },
+    { type: "onchain_on_us" },
+    { type: "onchain_payment" },
+    { type: "payment" },
+  ]
+
+  const outgoingSats =
+    (
+      await User.getVolume({
+        after: getTimestampYesterday(),
+        txnType,
+        accounts: this.accountPath,
+      })
+    )?.outgoingSats ?? 0
+
+  return threshold - outgoingSats
+}
+
 UserSchema.methods.limitHit = async function ({
   on_us,
   amount,
@@ -279,8 +304,6 @@ UserSchema.methods.limitHit = async function ({
   on_us: boolean
   amount: number
 }) {
-  const timestampYesterday = Date.now() - MS_PER_DAY
-
   const txnType = on_us
     ? [{ type: "on_us" }, { type: "onchain_on_us" }]
     : [{ type: { $ne: "on_us" } }]
@@ -290,7 +313,7 @@ UserSchema.methods.limitHit = async function ({
   const outgoingSats =
     (
       await User.getVolume({
-        after: timestampYesterday,
+        after: getTimestampYesterday(),
         txnType,
         accounts: this.accountPath,
       })

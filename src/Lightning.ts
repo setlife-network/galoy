@@ -291,10 +291,12 @@ export const LightningMixin = (superclass) =>
         params,
       })
 
+      const twoFactorLimitHit = tokens > (await this.user.remainingTwoFactorThreshold())
+
       if (
         yamlConfig.twoFactor?.enabled &&
         this.user.twoFactor.secret &&
-        tokens > this.user.twoFactor.threshold
+        twoFactorLimitHit
       ) {
         if (!token) {
           throw new TwoFactorError("Need a 2FA code to proceed with the payment", {
@@ -308,6 +310,7 @@ export const LightningMixin = (superclass) =>
           secret: this.user.twoFactor.secret,
         })
       }
+
       let fee
       let route
       let paymentPromise
