@@ -73,7 +73,15 @@ const helmRevision = process.env.HELMREVISION
 const resolvers = {
   Query: {
     me: async (_, __, { uid, user }) => {
-      const { phone, username, contacts, language, level, twoFactorSecret } = user
+      const { phone, username, contacts, language, level, twoFactor } = user
+
+      let twoFactorEnabled = false,
+        remainingTwoFactorThreshold
+      if (twoFactor?.secret) {
+        remainingTwoFactorThreshold = await user.remainingTwoFactorThreshold()
+        twoFactorEnabled = true
+      }
+
       return {
         id: uid,
         level,
@@ -81,7 +89,8 @@ const resolvers = {
         username,
         contacts,
         language,
-        twoFactorEnabled: !!twoFactorSecret,
+        twoFactorEnabled,
+        remainingTwoFactorThreshold,
       }
     },
 
