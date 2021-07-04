@@ -76,9 +76,9 @@ const resolvers = {
       const { phone, username, contacts, language, level, twoFactor } = user
 
       let twoFactorEnabled = false,
-        remainingTwoFactorThreshold
+        remainingTwoFactorLimit
       if (twoFactor?.secret) {
-        remainingTwoFactorThreshold = await user.remainingTwoFactorThreshold()
+        remainingTwoFactorLimit = await user.remainingTwoFactorLimit()
         twoFactorEnabled = true
       }
 
@@ -90,7 +90,7 @@ const resolvers = {
         contacts,
         language,
         twoFactorEnabled,
-        remainingTwoFactorThreshold,
+        remainingTwoFactorLimit,
       }
     },
 
@@ -193,6 +193,7 @@ const resolvers = {
       return uid
     },
     getLevels: () => Levels,
+    getUserLimits: (_, __, { wallet }) => wallet.getUserLimits(),
     getLimits: (_, __, { user }) => {
       return {
         oldEnoughForWithdrawal: yamlConfig.limits.oldEnoughForWithdrawal,
@@ -307,6 +308,7 @@ const permissions = shield(
       generate2fa: isAuthenticated,
       validate2fa: isAuthenticated,
       getLastOnChainAddress: isAuthenticated,
+      getUserLimits: isAuthenticated,
       getUserDetails: and(isAuthenticated, isEditor),
       getUid: and(isAuthenticated, isEditor),
       getLevels: and(isAuthenticated, isEditor),

@@ -333,4 +333,22 @@ export abstract class UserWallet {
       logger: this.logger,
     })
   }
+
+  getUserLimits = async () => {
+    const remainingTwoFactorLimit = this.user.remainingTwoFactorLimit()
+    const remainingOnUsLimit = this.user.remainingOnUsLimit()
+    const remainingWithdrawalLimit = this.user.remainingWithdrawalLimit()
+
+    const remainingLimits = await Promise.all([
+      remainingTwoFactorLimit,
+      remainingOnUsLimit,
+      remainingWithdrawalLimit,
+    ])
+
+    return {
+      remainingTwoFactorLimit: remainingLimits[0],
+      remainingOnUsLimit: remainingLimits[1],
+      remainingWithdrawalLimit: remainingLimits[2],
+    }
+  }
 }

@@ -291,7 +291,7 @@ export const LightningMixin = (superclass) =>
         params,
       })
 
-      const twoFactorLimitHit = tokens > (await this.user.remainingTwoFactorThreshold())
+      const twoFactorLimitHit = tokens > (await this.user.remainingTwoFactorLimit())
 
       if (
         yamlConfig.twoFactor?.enabled &&
@@ -326,7 +326,7 @@ export const LightningMixin = (superclass) =>
           if (isMyNode({ pubkey: destination }) || destination === "") {
             const lightningLoggerOnUs = lightningLogger.child({ onUs: true, fee: 0 })
 
-            if (await this.user.limitHit({ on_us: true, amount: tokens })) {
+            if ((await this.user.remainingOnUsLimit) < tokens) {
               const error = `Cannot transfer more than ${
                 yamlConfig.limits.onUs.level[this.user.level]
               } sats in 24 hours`
@@ -460,7 +460,7 @@ export const LightningMixin = (superclass) =>
             throw new NewAccountWithdrawalError(error, { logger: lightningLogger })
           }
 
-          if (await this.user.limitHit({ on_us: false, amount: tokens })) {
+          if ((await this.user.remainingWithdrawalLimit) < tokens) {
             const error = `Cannot transfer more than ${
               yamlConfig.limits.withdrawal.level[this.user.level]
             } sats in 24 hours`

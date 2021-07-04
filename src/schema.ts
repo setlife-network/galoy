@@ -275,7 +275,7 @@ UserSchema.virtual("oldEnoughForWithdrawal").get(function (this: typeof UserSche
 const getTimestampYesterday = () => Date.now() - MS_PER_DAY
 
 // FIXME: Improve function name
-UserSchema.methods.remainingTwoFactorThreshold = async function () {
+UserSchema.methods.remainingTwoFactorLimit = async function () {
   const threshold = this.twoFactor.threshold
 
   const txnType = [
@@ -297,29 +297,34 @@ UserSchema.methods.remainingTwoFactorThreshold = async function () {
   return threshold - outgoingSats
 }
 
-UserSchema.methods.limitHit = async function ({
-  on_us,
-  amount,
-}: {
-  on_us: boolean
-  amount: number
-}) {
-  const txnType = on_us
-    ? [{ type: "on_us" }, { type: "onchain_on_us" }]
-    : [{ type: { $ne: "on_us" } }]
-
-  const limit = yamlConfig.limits[on_us ? "onUs" : "withdrawal"].level[this.level]
+UserSchema.methods.remainingWithdrawalLimit = async function () {
+  const withdrawalLimit = yamlConfig.limits["withdrawal"].level[this.level]
 
   const outgoingSats =
     (
       await User.getVolume({
         after: getTimestampYesterday(),
-        txnType,
+        txnType: [{ type: { $ne: "on_us" } }],
         accounts: this.accountPath,
       })
     )?.outgoingSats ?? 0
 
-  return outgoingSats + amount > limit
+  return withdrawalLimit - outgoingSats
+}
+
+UserSchema.methods.remainingOnUsLimit = async function () {
+  const onUsLimit = yamlConfig.limits["onUs"].level[this.level]
+
+  const outgoingSats =
+    (
+      await User.getVolume({
+        after: getTimestampYesterday(),
+        txnType: [{ type: "on_us" }, { type: "onchain_on_us" }],
+        accounts: this.accountPath,
+      })
+    )?.outgoingSats ?? 0
+
+  return onUsLimit - outgoingSats
 }
 
 UserSchema.statics.getVolume = async function ({

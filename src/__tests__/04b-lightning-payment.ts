@@ -306,7 +306,7 @@ functionToTests.forEach(({ fn, name, initialFee }) => {
     expect(finalBalance).toBe(initBalance1)
   }, 60000)
 
-  it(`fails to pay above 2fa threshold without 2fa token`, async () => {
+  it(`fails to pay above 2fa limit without 2fa token`, async () => {
     // this is needed because this test runs twice
     if (!userWallet0.user.twoFactor.secret) {
       const { secret } = userWallet0.generate2fa()
@@ -314,11 +314,11 @@ functionToTests.forEach(({ fn, name, initialFee }) => {
       await userWallet0.save2fa({ secret, token })
     }
 
-    const remainingThreshold = await userWallet0.user.remainingTwoFactorThreshold()
+    const remainingLimit = await userWallet0.user.remainingTwoFactorLimit()
 
     const { request } = await createInvoice({
       lnd: lndOutside1,
-      tokens: remainingThreshold + 1,
+      tokens: remainingLimit + 1,
     })
     await expect(fn(userWallet0)({ invoice: request })).rejects.toThrow()
 
@@ -574,13 +574,17 @@ it("fails to pay regular invoice with separate amt", async () => {
 })
 
 it("fails to pay when withdrawalLimit exceeded", async () => {
-  const { request } = await createInvoice({ lnd: lndOutside1, tokens: 2e6 })
+  const remainingLimit = await userWallet0.user.remainingWithdrawalLimit()
+  const { request } = await createInvoice({
+    lnd: lndOutside1,
+    tokens: remainingLimit + 1,
+  })
   await expect(userWallet0.pay({ invoice: request })).rejects.toThrow()
 })
 
-it("fails to pay when amount exceeds onUs limit", async () => {
-  const level1Limit = yamlConfig.limits.onUs.level["1"]
-  const request = await userWallet1.addInvoice({ value: level1Limit + 1 })
+it("fails to pay when onUs limit exceeded", async () => {
+  const remainingLimit = await userWallet0.user.remainingOnUsLimit()
+  const request = await userWallet1.addInvoice({ value: remainingLimit + 1 })
   await expect(userWallet0.pay({ invoice: request })).rejects.toThrow()
 })
 
