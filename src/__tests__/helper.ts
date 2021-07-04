@@ -7,6 +7,7 @@ import {
   openChannel,
   subscribeToChannels,
 } from "lightning"
+import { generateToken } from "node-2fa"
 import { yamlConfig } from "../config"
 import { FtxDealerWallet } from "../dealer/FtxDealerWallet"
 import { balanceSheetIsBalanced, updateUsersPendingPayment } from "../ledger/balanceSheet"
@@ -174,4 +175,14 @@ export const mineBlockAndSync = async ({
     promiseArray.push(waitUntilBlockHeight({ lnd, blockHeight }))
   }
   await Promise.all(promiseArray)
+}
+
+export const generateTokenHelper = ({ secret }) => {
+  const generateTokenResult = generateToken(secret)
+  expect(generateTokenResult).toBeTruthy()
+  if (generateTokenResult) {
+    return generateTokenResult.token
+  } else {
+    fail("generateToken returned null")
+  }
 }
