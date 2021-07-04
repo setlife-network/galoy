@@ -12,7 +12,6 @@ import {
   pay,
   settleHodlInvoice,
 } from "lightning"
-import { yamlConfig } from "../config"
 import { FEECAP } from "../lndAuth"
 import { getActiveLnd, nodesPubKey } from "../lndUtils"
 import { setupMongoConnection } from "../mongodb"
