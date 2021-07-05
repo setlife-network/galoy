@@ -186,13 +186,6 @@ const resolvers = {
     },
     getLevels: () => Levels,
     getUserLimits: (_, __, { wallet }) => wallet.getUserLimits(),
-    getLimits: (_, __, { user }) => {
-      return {
-        oldEnoughForWithdrawal: yamlConfig.limits.oldEnoughForWithdrawal,
-        withdrawal: yamlConfig.limits.withdrawal.level[user.level],
-        onUs: yamlConfig.limits.onUs.level[user.level],
-      }
-    },
     getWalletFees: () => ({
       deposit: yamlConfig.fees.deposit,
     }),
