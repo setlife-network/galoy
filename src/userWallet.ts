@@ -335,14 +335,10 @@ export abstract class UserWallet {
   }
 
   getUserLimits = async () => {
-    const remainingTwoFactorLimit = this.user.remainingTwoFactorLimit()
-    const remainingOnUsLimit = this.user.remainingOnUsLimit()
-    const remainingWithdrawalLimit = this.user.remainingWithdrawalLimit()
-
     const remainingLimits = await Promise.all([
-      remainingTwoFactorLimit,
-      remainingOnUsLimit,
-      remainingWithdrawalLimit,
+      this.user.remainingTwoFactorLimit(),
+      this.user.remainingOnUsLimit(),
+      this.user.remainingWithdrawalLimit(),
     ])
 
     return {

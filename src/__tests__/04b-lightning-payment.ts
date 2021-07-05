@@ -12,6 +12,7 @@ import {
   pay,
   settleHodlInvoice,
 } from "lightning"
+import { TwoFactorError } from "../error"
 import { FEECAP } from "../lndAuth"
 import { getActiveLnd, nodesPubKey } from "../lndUtils"
 import { setupMongoConnection } from "../mongodb"
@@ -307,7 +308,7 @@ functionToTests.forEach(({ fn, name, initialFee }) => {
 
   it(`fails to pay above 2fa limit without 2fa token`, async () => {
     // this is needed because this test runs twice
-    if (!userWallet0.user.twoFactor.secret) {
+    if (!userWallet0.user.twoFactorEnabled) {
       const { secret } = userWallet0.generate2fa()
       const token = generateTokenHelper({ secret })
       await userWallet0.save2fa({ secret, token })
@@ -319,7 +320,9 @@ functionToTests.forEach(({ fn, name, initialFee }) => {
       lnd: lndOutside1,
       tokens: remainingLimit + 1,
     })
-    await expect(fn(userWallet0)({ invoice: request })).rejects.toThrow()
+    await expect(fn(userWallet0)({ invoice: request })).rejects.toThrowError(
+      TwoFactorError,
+    )
 
     const { BTC: finalBalance } = await userWallet0.getBalances()
     expect(finalBalance).toBe(initBalance0)

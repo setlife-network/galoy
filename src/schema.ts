@@ -272,6 +272,10 @@ UserSchema.virtual("oldEnoughForWithdrawal").get(function (this: typeof UserSche
   return d - this.created_at.getTime() > yamlConfig.limits.oldEnoughForWithdrawal
 })
 
+UserSchema.virtual("twoFactorEnabled").get(function (this: typeof UserSchema) {
+  return !!this.twoFactor.secret
+})
+
 const getTimestampYesterday = () => Date.now() - MS_PER_DAY
 
 // FIXME: Improve function name

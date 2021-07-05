@@ -145,6 +145,7 @@ describe("username tests", () => {
     const token = generateTokenHelper({ secret })
     await userWallet0.save2fa({ secret, token })
     userWallet0 = await getUserWallet(0)
+    expect(userWallet0.user.twoFactorEnabled).toBe(true)
     expect(userWallet0.user.twoFactor.secret).toBe(secret)
   })
 
@@ -161,6 +162,6 @@ describe("username tests", () => {
     const result = await userWallet0.delete2fa({ token })
     expect(result).toBeTruthy()
     userWallet0 = await getUserWallet(0)
-    expect(userWallet0.user.twoFactor.secret).toBeFalsy()
+    expect(userWallet0.user.twoFactorEnabled).toBeFalsy()
   })
 })
