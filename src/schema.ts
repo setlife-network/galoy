@@ -302,6 +302,8 @@ UserSchema.methods.remainingTwoFactorLimit = async function () {
 }
 
 UserSchema.methods.remainingWithdrawalLimit = async function () {
+  if (!this.oldEnoughForWithdrawal) return 0
+
   const withdrawalLimit = yamlConfig.limits["withdrawal"].level[this.level]
 
   const outgoingSats =
