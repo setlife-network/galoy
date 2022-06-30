@@ -3,6 +3,7 @@ type PhoneCode = string & { readonly brand: unique symbol }
 
 type KratosUserId = string & { readonly brand: unique symbol }
 type EmailAddress = string & { readonly brand: unique symbol }
+type WireTransferCode = string & { readonly brand: unique symbol }
 
 type UserLanguage = typeof import("./languages").Languages[number]
 
@@ -57,6 +58,7 @@ type User = {
   readonly isEditor: boolean
   language: UserLanguage
   twoFA: TwoFAForUser
+  wireTransferCode: WireTransferCode
 }
 
 type NewUserInfo = {

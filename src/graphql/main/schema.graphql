@@ -37,7 +37,7 @@ type AccountUpdateDefaultWalletIdPayload {
 }
 
 """
-An authentication code valid for a single use
+An JWT-formatted authentication token
 """
 scalar AuthToken
 
@@ -644,6 +644,9 @@ type Mutation {
     @deprecated(
       reason: "Username will be moved to @Handle in Accounts. Also SetUsername should be used instead of UpdateUsername to reflect the idempotency of Handles"
     )
+  userUpdateWireTransferCode(
+    input: UserUpdateWireTransferCodeInput!
+  ): UserUpdateWireTransferCodePayload!
 }
 
 type MyUpdatesPayload {
@@ -1181,6 +1184,15 @@ type UserUpdateUsernamePayload {
   user: User
 }
 
+input UserUpdateWireTransferCodeInput {
+  wireTransferCode: WireTransferCode!
+}
+
+type UserUpdateWireTransferCodePayload {
+  errors: [Error!]!
+  user: User
+}
+
 """
 Unique identifier of a user
 """
@@ -1231,3 +1243,5 @@ enum WalletCurrency {
 Unique identifier of a wallet
 """
 scalar WalletId
+
+scalar WireTransferCode

@@ -24,6 +24,7 @@ import TwoFASaveMutation from "@graphql/root/mutation/twofa-save"
 import UserLoginMutation from "@graphql/root/mutation/user-login"
 import UserRequestAuthCodeMutation from "@graphql/root/mutation/user-request-auth-code"
 import UserUpdateLanguageMutation from "@graphql/root/mutation/user-update-language"
+import UserUpdateWireTransferCodeMutation from "@graphql/root/mutation/user-update-wire-transfer-code"
 import UserUpdateUsernameMutation from "@graphql/root/mutation/user-update-username"
 import AccountUpdateDefaultWalletIdMutation from "@graphql/root/mutation/account-update-default-wallet-id"
 import UserContactUpdateAliasMutation from "@graphql/root/mutation/user-contact-update-alias"
@@ -62,6 +63,7 @@ const fields = {
 
   userUpdateLanguage: UserUpdateLanguageMutation,
   userUpdateUsername: UserUpdateUsernameMutation,
+  userUpdateWireTransferCode: UserUpdateWireTransferCodeMutation,
   accountUpdateDefaultWalletId: AccountUpdateDefaultWalletIdMutation,
   userContactUpdateAlias: UserContactUpdateAliasMutation,
 

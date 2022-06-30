@@ -90,6 +90,7 @@ interface UserRecord {
   onchain: OnChainObjectForUser[]
   twoFA: TwoFAForUser
   defaultWalletId: WalletId
+  wireTransferCode: string
 
   lastIPs: {
     ip: string

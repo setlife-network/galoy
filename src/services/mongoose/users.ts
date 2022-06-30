@@ -99,6 +99,7 @@ export const UsersRepository = (): IUsersRepository => {
     language,
     deviceTokens,
     twoFA,
+    wireTransferCode,
   }: User): Promise<User | RepositoryError> => {
     try {
       const data = {
@@ -106,11 +107,19 @@ export const UsersRepository = (): IUsersRepository => {
         language,
         deviceToken: deviceTokens,
         twoFA,
+        $set: {
+          wireTransferCode,
+        },
       }
+      console.log("data")
+      console.log(data)
       const result = await User.findOneAndUpdate({ _id: toObjectId<UserId>(id) }, data, {
         projection,
         new: true,
       })
+      console.log("result")
+      console.log(result)
+
       if (!result) {
         return new RepositoryError("Couldn't update user")
       }
@@ -134,6 +143,7 @@ const userFromRaw = (result: UserRecord): User => ({
   id: fromObjectId<UserId>(result._id),
   phone: result.phone as PhoneNumber,
   language: result.language as UserLanguage,
+  wireTransferCode: result.wireTransferCode as WireTransferCode,
   twoFA: result.twoFA as TwoFAForUser,
   quizQuestions:
     result.earn?.map(
@@ -161,4 +171,5 @@ const projection = {
   created_at: 1,
   twilio: 1,
   role: 1,
+  wireTransferCode: 1,
 }
