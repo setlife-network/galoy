@@ -1944,14 +1944,14 @@
     "@opentelemetry/instrumentation" "^0.29.2"
     graphql "^15.5.1"
 
-"@opentelemetry/instrumentation-grpc@^0.30.0":
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-grpc/-/instrumentation-grpc-0.30.0.tgz#93ceea6eecfcee738e6355c0cf3df5898f9dab3d"
-  integrity sha512-bhSjv/qepJKRcaZ0yrjNbAu3KCT4JKG1PXoqTIpuoKwTB7W94lW7psAlUnqeohZ8GfV4Z52iaK6s0HcD3XjKbQ==
+"@opentelemetry/instrumentation-grpc@^0.31.0":
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-grpc/-/instrumentation-grpc-0.31.0.tgz#6ab4283e8ad934757a14de0bf29066e6993ae5dd"
+  integrity sha512-NxVk/6Cr/UqCQUHbxv2q010grBMrOYTmo2OLW64wtn7hlem9gfuivJUIG0nXmbZm27SwvC7yHmE8m0rf28WTrg==
   dependencies:
-    "@opentelemetry/api-metrics" "0.30.0"
-    "@opentelemetry/instrumentation" "0.30.0"
-    "@opentelemetry/semantic-conventions" "1.4.0"
+    "@opentelemetry/api-metrics" "0.31.0"
+    "@opentelemetry/instrumentation" "0.31.0"
+    "@opentelemetry/semantic-conventions" "1.5.0"
 
 "@opentelemetry/instrumentation-http@^0.31.0":
   version "0.31.0"
@@ -1981,16 +1981,6 @@
     "@opentelemetry/semantic-conventions" "^1.0.0"
     "@types/mongodb" "3.6.20"
 
-"@opentelemetry/instrumentation@0.30.0", "@opentelemetry/instrumentation@^0.30.0":
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.30.0.tgz#97cca611bd276439cc4e01e0516e50cbbb1e3459"
-  integrity sha512-9bjRx81B6wbJ7CGWc/WCUfcb0QIG5UIcjnPTzwYIURjYPd8d0ZzRlrnqEdQG62jn4lSPEvnNqTlyC7qXtn9nAA==
-  dependencies:
-    "@opentelemetry/api-metrics" "0.30.0"
-    require-in-the-middle "^5.0.3"
-    semver "^7.3.2"
-    shimmer "^1.2.1"
-
 "@opentelemetry/instrumentation@0.31.0":
   version "0.31.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.31.0.tgz#bee0052a86e22f57be3901c44234f1a210bcfda8"
@@ -2007,6 +1997,16 @@
   integrity sha512-LXx5V0ONNATQFCE8C5uqnxWSm4rcXLssdLHdXjtGdxRmURqj/JO8jYefqXCD0LzsqEQ6yxOx2GZ0dgXvhBVdTw==
   dependencies:
     "@opentelemetry/api-metrics" "0.29.2"
+    require-in-the-middle "^5.0.3"
+    semver "^7.3.2"
+    shimmer "^1.2.1"
+
+"@opentelemetry/instrumentation@^0.30.0":
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.30.0.tgz#97cca611bd276439cc4e01e0516e50cbbb1e3459"
+  integrity sha512-9bjRx81B6wbJ7CGWc/WCUfcb0QIG5UIcjnPTzwYIURjYPd8d0ZzRlrnqEdQG62jn4lSPEvnNqTlyC7qXtn9nAA==
+  dependencies:
+    "@opentelemetry/api-metrics" "0.30.0"
     require-in-the-middle "^5.0.3"
     semver "^7.3.2"
     shimmer "^1.2.1"
