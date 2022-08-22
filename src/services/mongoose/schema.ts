@@ -231,6 +231,18 @@ const UserSchema = new Schema<UserRecord>(
         partialFilterExpression: { username: { $type: "string" } },
       },
     },
+
+    wireTransferCode: {
+      type: String,
+      // TODO: Write matching logic
+      // match: [UsernameRegex, "Username can only have alphabets, numbers and underscores"],
+      minlength: 8,
+      maxlength: 10,
+      index: {
+        unique: true,
+        collation: { locale: "en", strength: 2 },
+      },
+    },
     deviceToken: {
       type: [String],
       default: [],

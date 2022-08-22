@@ -181,7 +181,7 @@ onChainWallet:
 
 apollo:
   playground: true
-  playgroundUrl: "https://api.staging.galoy.io/graphql"
+  playgroundUrl: "http://localhost:4001/graphql"
 
 userActivenessMonthlyVolumeThreshold: 100 # cents
 
